@@ -1,0 +1,6 @@
+public/bower_components/
+public/**/*-styles.html
+dist/
+node_modules/
+.github/
+public/coverage/

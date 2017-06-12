@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>search-view</title>
+
+    <script src="../public/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../public/bower_components/web-component-tester/browser.js"></script>
+
+    <!-- Import the element to test -->
+    <link rel="import" href="../public/elements/views/search/search-view.html">
+  </head>
+  <body>
+    <test-fixture id="basic">
+      <template>
+        <search-view></search-view>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('search-view initializing', function() {
+        var element;
+
+        setup(function() {
+          element = fixture('basic');
+        });
+
+        test('Instantiating', function() {
+          assert.equal(element.is, 'search-view');
+        });
+
+        test('Properties', function() {
+          assert.typeOf(element._searchValue, 'string');
+          assert.typeOf(element._rootUrl, 'string');
+          assert.typeOf(element._defaultLimit, 'number');
+
+          assert.equal(element._searchValue, 'Beatles');
+          assert.equal(element._rootUrl, '/api/search');
+          assert.equal(element._defaultLimit, 50);
+        });
+      });
+
+      suite('search-view _buildParams', function() {
+        var element;
+
+        setup(function() {
+          element = fixture('basic');
+        });
+
+        test('_buildParams() with no params', function(done) {
+          flush(function () {
+            var requestParams = element._buildParams();
+            assert.typeOf(requestParams, 'object');
+            assert.equal(requestParams.term, '');
+            assert.equal(requestParams.limit, 50);
+            assert.equal(requestParams.entity, 'song');
+            done();
+          });
+        });
+
+        test('_buildParams(term) with one param', function(done) {
+          flush(function () {
+            var requestParams = element._buildParams('Bruno Mars');
+            assert.typeOf(requestParams, 'object');
+            assert.equal(requestParams.term, 'Bruno Mars');
+            assert.equal(requestParams.limit, 50);
+            assert.equal(requestParams.entity, 'song');
+            done();
+          });
+        });
+
+        test('_buildParams(term, limit) with two params', function(done) {
+          flush(function () {
+            var requestParams = element._buildParams('Bruno Mars', 200);
+            assert.typeOf(requestParams, 'object');
+            assert.equal(requestParams.term, 'Bruno Mars');
+            assert.equal(requestParams.limit, 200);
+            assert.equal(requestParams.entity, 'song');
+            done();
+          });
+        });
+
+        test('_buildParams(term, limit) with bad params', function(done) {
+          flush(function () {
+            var requestParams = element._buildParams(null, undefined);
+            assert.typeOf(requestParams, 'object');
+            assert.equal(requestParams.term, '');
+            assert.equal(requestParams.limit, 50);
+            assert.equal(requestParams.entity, 'song');
+            done();
+          });
+        });
+      });
+
+      suite('search-view _computeSort', function() {
+        var element;
+
+        setup(function() {
+          element = fixture('basic');
+        });
+
+        test('_computeSort() with no params', function() {
+          assert.equal(element._computeSort(), 0);
+          assert.equal(element._computeSort({}), 0);
+          assert.equal(element._computeSort(null), 0);
+          assert.equal(element._computeSort(undefined), 0);
+          assert.equal(element._computeSort(-1), 0);
+        });
+
+        test('_computeSort(a) with one item', function() {
+          assert.equal(element._computeSort({
+            trackName: ''
+          }), 0);
+          assert.equal(element._computeSort({
+            trackName: 'Beatles'
+          }), 0);
+        });
+
+        test('_computeSort(a, a) with two items', function() {
+          assert.equal(element._computeSort({
+            trackName: ''
+          }, {
+            trackName: ''
+          }), 0);
+          assert.equal(element._computeSort({
+            trackName: 'Beatles'
+          }, {
+            trackName: 'ZZ Top'
+          }), -1);
+          assert.equal(element._computeSort({
+            trackName: 'ZZ Top'
+          }, {
+            trackName: 'Beatles'
+          }), 1);
+          assert.equal(element._computeSort({
+            trackName: 'Beatles'
+          }, {
+            trackName: 'beatles'
+          }), 0);
+        });
+      });
+    </script>
+  </body>
+</html>

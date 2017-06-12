@@ -1,0 +1,70 @@
+<!-- Core Polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<!-- Iron -->
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+<!-- Common JS -->
+<link rel="import" href="../imports/moment.html">
+
+<!-- Styles -->
+<link rel="import" href="../../shared-styles.html">
+<link rel="import" href="./itunes-card-styles.html">
+
+<dom-module id="itunes-card">
+  <template>
+    <style include="shared-styles"></style>
+    <style include="itunes-card-styles"></style>
+    <style include="iron-flex iron-flex-alignment"></style>
+
+    <div class="card">
+      <div class="horizontal layout center">
+        <div>
+          <img src="[[data.artworkUrl100]]" />
+        </div>
+        <div class="flex u-pl u-pr">
+          <h1 class="title">[[_getTitle(data)]]</h1>
+          <b>[[data.artistName]]</b>
+          <div>[[data.collectionName]]</div>
+          <div>[[_getDate(data.releaseDate)]]</div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'itunes-card',
+      properties: {
+        /**
+         * An iTunes object (song, artist, music video, etc.)
+         * */
+        data: {
+          type: Object
+        }
+      },
+
+      /**
+       * Get the title given the type
+       * @param {Object} item - iTunes item
+       * */
+      _getTitle: (item) => {
+        if (item && item.trackName) {
+          return item.trackName;
+        }
+        return '';
+      },
+
+      /**
+       * Get relative date via Moment.js
+       * */
+      _getDate: (date) => {
+        if (date) {
+          return moment(date).fromNow();
+        }
+        return '';
+      }
+    });
+  </script>
+</dom-module>

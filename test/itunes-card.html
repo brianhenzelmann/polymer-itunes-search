@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>itunes-card</title>
+
+    <script src="../public/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../public/bower_components/web-component-tester/browser.js"></script>
+
+    <!-- Import the element to test -->
+    <link rel="import" href="../public/elements/itunes-card/itunes-card.html">
+  </head>
+  <body>
+    <test-fixture id="basic">
+      <template>
+        <itunes-card></itunes-card>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('itunes-card initializing', function() {
+        var element;
+
+        setup(function() {
+          element = fixture('basic');
+        });
+
+        test('Instantiating', function() {
+          assert.equal(element.is, 'itunes-card');
+        });
+
+        test('Properties', function() {
+          assert.isNotOk(element.data);
+        });
+      });
+
+      suite('search-view _getTitle', function() {
+        var element;
+
+        setup(function() {
+          element = fixture('basic');
+        });
+
+        test('_getTitle() with no params', function() {
+          assert.equal(element._getTitle(), '');
+        });
+
+        test('_getTitle(data) with one param', function() {
+          assert.equal(element._getTitle({}), '');
+          assert.equal(element._getTitle({
+            trackName: 'Hello'
+          }), 'Hello');
+        });
+
+        test('_getTitle(string) with one string param', function() {
+          assert.equal(element._getTitle('Hello'), '');
+        });
+
+        test('_getTitle(null) with bad params', function() {
+          assert.equal(element._getTitle(null), '');
+        });
+      });
+
+      suite('search-view _getDate', function() {
+        var element;
+
+        setup(function() {
+          element = fixture('basic');
+        });
+
+        test('_getDate() with no params', function() {
+          assert.equal(element._getDate(), '');
+        });
+
+        test('_getDate(data) with one param', function() {
+          assert.equal(element._getDate({}), 'a few seconds ago');
+          assert.equal(element._getDate(new Date()), 'a few seconds ago');
+          assert.equal(element._getDate(new Date() - 100000000), 'a day ago');
+        });
+
+        test('_getDate(string) with one string param', function() {
+          assert.equal(element._getDate('Hello'), 'Invalid date');
+        });
+
+        test('_getDate(null) with bad params', function() {
+          assert.equal(element._getDate(null), '');
+        });
+      });
+    </script>
+  </body>
+</html>

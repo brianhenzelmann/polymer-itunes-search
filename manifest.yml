@@ -1,0 +1,7 @@
+---
+applications:
+- name: polymer-itunes-search
+  memory: 64M
+  buildpack: nodejs_buildpack
+  command: node server/app.js
+  path: dist

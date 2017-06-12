@@ -1,0 +1,38 @@
+{
+  "name": "polymer-itunes-search",
+  "devDependencies": {
+    "eslint": "^3.12.0",
+    "eslint-config-google": "^0.7.1",
+    "eslint-plugin-html": "^1.7.0",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^4.0.0",
+    "gulp-browserify": "^0.5.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-filter": "^5.0.0",
+    "gulp-htmlmin": "^3.0.0",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-sequence": "^0.4.6",
+    "gulp-style-modules": "^0.1.0",
+    "merge-stream": "^1.0.1",
+    "node-sass-import-once": "^1.2.0",
+    "polymer-build": "^1.5.1",
+    "web-component-tester": "4.0.3",
+    "web-component-tester-istanbul": "^0.10.0"
+  },
+  "bin": {
+    "wct": "./bin/wct"
+  },
+  "scripts": {
+    "lint": "eslint . --ext js,html --ignore-path .gitignore",
+    "test": "wct"
+  },
+  "dependencies": {
+    "express": "^4.15.3",
+    "express-http-proxy": "^1.0.3",
+    "gulp-sass": "^3.1.0",
+    "https-proxy-agent": "^1.0.0",
+    "node-sass": "^4.5.3",
+    "path": "^0.12.7"
+  }
+}

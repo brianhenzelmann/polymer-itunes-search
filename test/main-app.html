@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>main-app</title>
+
+    <script src="../public/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../public/bower_components/web-component-tester/browser.js"></script>
+
+    <!-- Import the element to test -->
+    <link rel="import" href="../public/elements/main-app/main-app.html">
+  </head>
+  <body>
+    <test-fixture id="basic">
+      <template>
+        <main-app></main-app>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('main-app initializing', function() {
+        var element;
+
+        setup(function() {
+          element = fixture('basic');
+        });
+
+        test('Instantiating', function() {
+          assert.equal(element.is, 'main-app');
+        });
+
+        test('Properties', function() {
+          assert.typeOf(element._page, 'string');
+          assert.typeOf(element._defaultView, 'string');
+
+          assert.equal(element._page, 'search');
+          assert.equal(element._defaultView, 'search');
+        });
+      });
+    </script>
+  </body>
+</html>

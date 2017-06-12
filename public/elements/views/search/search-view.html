@@ -1,0 +1,100 @@
+<!-- Core Polymer -->
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<!-- Iron -->
+<link rel="import" href="../../../bower_components/iron-ajax/iron-ajax.html">
+
+<!-- iTunes -->
+<link rel="import" href="../../itunes-card/itunes-card.html">
+
+<!-- Styles -->
+<link rel="import" href="../../../shared-styles.html">
+<link rel="import" href="./search-view-styles.html">
+
+<dom-module id="search-view">
+  <template>
+    <style include="shared-styles"></style>
+    <style include="search-view-styles"></style>
+    
+    <!-- iTunes Search API -->
+    <iron-ajax
+      auto
+      url="[[_rootUrl]]"
+      params="[[_buildParams(_searchValue, _defaultLimit)]]"
+      handle-as="json"
+      last-response="{{_response}}"
+      debounce-duration="300">
+    </iron-ajax>
+
+    <div class="card">
+      <paper-input
+        label="Search iTunes"
+        value="{{_searchValue}}">
+          <iron-icon icon="search" slot="prefix"></iron-icon>
+      </paper-input>
+    </div>
+
+    <template is="dom-repeat" items="[[_response.results]]" sort="_computeSort">
+      <itunes-card data="[[item]]"></itunes-card>
+    </template>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'search-view',
+      properties: {
+        /**
+         * Search value used when hitting the iTunes Search API
+         * */
+        _searchValue: {
+          type: String,
+          value: 'Beatles'
+        },
+
+        /**
+         * Root URL of the iTunes Search API
+         * */
+        _rootUrl: {
+          type: String,
+          value: '/api/search'
+        },
+
+        /**
+         * The default number of results to return from the API
+         * */
+        _defaultLimit: {
+          type: Number,
+          value: 50
+        }
+      },
+
+      /**
+       * Build the URL parameters needed for the iTunes Search API
+       * @param {String} term - string used to search for iTunes content
+       * @return {Object} GET URL parameters
+       * */
+      _buildParams: (term, limit) => {
+        return {
+          term: term ? term : '',
+          limit: limit ? limit : 50,
+          entity: 'song'
+        }
+      },
+
+      /**
+       * Sort the list of iTunes items
+       * @param {Object} a - first object to compare
+       * @param {Object} b - second object to compare
+       * */
+      _computeSort: (a, b) => {
+        if (a && b && a.trackName.toUpperCase() === b.trackName.toUpperCase()) {
+          return 0;
+        }
+        if (a && b && a.trackName && b.trackName) {
+          return a.trackName.toUpperCase() > b.trackName.toUpperCase() ? 1 : -1;
+        }
+        return 0;
+      }
+    });
+  </script>
+</dom-module>

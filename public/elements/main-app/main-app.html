@@ -1,0 +1,99 @@
+<!-- Core Polymer -->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<!-- Layout Elements -->
+<link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+
+<!-- Routing -->
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+
+<!-- Iron Elements -->
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<!-- Paper Elements-->
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<!-- Styles -->
+<link rel="import" href="../../shared-styles.html">
+<link rel="import" href="./main-app-styles.html">
+
+<dom-module id="main-app">
+  <template>
+    <style include="shared-styles"></style>
+    <style include="main-app-styles"></style>
+
+    <app-location
+      route="{{route}}"
+      use-hash-as-path>
+    </app-location>
+    <app-route
+      route="{{route}}"
+      pattern="/:page"
+      data="{{routeData}}"
+      tail="{{subroute}}">
+    </app-route>
+
+    <app-header-layout>
+
+      <app-header condenses fixed reveals effects="waterfall">
+        <app-toolbar>
+          <div main-title>iTunes Search</div>
+          <a href="/coverage/lcov-report/" target="_blank">
+            <paper-icon-button icon="code">Code Coverage</paper-icon-button>
+          </a>
+        </app-toolbar>
+      </app-header>
+
+      <iron-pages
+        selected="[[_page]]"
+        attr-for-selected="name"
+        fallback-selection="[[_defaultView]]"
+        role="main">
+          <search-view name="search"></search-view>
+      </iron-pages>
+    </app-header-layout>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'main-app',
+
+      properties: {
+        /**
+         * Current view to display.
+         * */
+        _page: {
+          type: String,
+          reflectToAttribute: true,
+          observer: '_pageChanged',
+        },
+        _defaultView: {
+          type: String,
+          value: 'search'
+        }
+      },
+
+      observers: [
+        '_routePageChanged(routeData.page)',
+      ],
+
+      _routePageChanged: function(page) {
+        this._page = page || this._defaultView;
+      },
+
+      _pageChanged: function(page) {
+        var resolvedPageUrl = this.resolveUrl('../views/' + page + '/' + page + '-view.html');
+        this.importHref(resolvedPageUrl, null, null, true);
+      }
+    });
+  </script>
+</dom-module>

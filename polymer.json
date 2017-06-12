@@ -1,0 +1,17 @@
+{
+  "entrypoint": "public/index.html",
+  "shell": "public/elements/main-app/main-app.html",
+  "builds":[{"addServiceWorker": true}],
+  "fragments": [
+    "public/elements/views/search/search-view.html"
+  ],
+  "sourceGlobs": [
+    "public/elements/**/*",
+    "images/**/*",
+    "bower.json"
+  ],
+  "includeDependencies": [
+    "manifest.json",
+    "public/bower_components/webcomponentsjs/webcomponents-lite.min.js"
+  ]
+}
